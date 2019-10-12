@@ -24,5 +24,14 @@ export default [
         component: 'c-white-space'
       }
     ]
+  },
+  {
+    name: '图片组件',
+    child: [
+      {
+        name: '图片组件',
+        component: 'c-img'
+      }
+    ]
   }
 ]
