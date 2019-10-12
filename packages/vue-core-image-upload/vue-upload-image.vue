@@ -1,6 +1,6 @@
 <template>
   <div class="g-core-image-upload-btn" ref="container">
-    <slot v-if="!hasImage">
+    <slot>
       <div class="g-core-text">{{text}}</div>
     </slot>
     <form
@@ -22,12 +22,8 @@
         style="width: 100%; height: 100%;"
       />
     </form>
-    <div class="img-area" :class="{'img-area-config': config_model }" v-else="hasImage">
-      <img :src="url" alt />
-      <div class="title" v-if="config_model">{{file_name}}</div>
-      <div class="del" v-if="config_model" @click="imageClear">
-        <img src="../../src/assets/round_close.svg" alt />
-      </div>
+    <div class="img-area" v-else="hasImage">
+      <img :src="url" alt="">
     </div>
   </div>
 </template>
@@ -86,9 +82,7 @@ export default {
       hasImage: false,
       options: this.props,
       uploading: false,
-      file_name: "",
       url: "",
-      config_model: true,
       formID: (Math.random() * 10000 + "").split(".")[0]
     };
   },
@@ -103,50 +97,6 @@ export default {
   },
 
   methods: {
-    // 文件转图片
-    file2img(image_file, key) {
-      //  解决图片多选问题
-      let file = image_file.length >= 1 ? image_file[0] : image_file;
-
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file); //读取图片
-      fileReader.addEventListener("load", () => {
-        // 读取完成
-        // res是base64格式的图片
-        this[key] = fileReader.result;
-        console.log(file);
-        this.file_name = file.name;
-        this.hasImage = true;
-      });
-
-      // lrz(file)
-      //   .then(ret => {
-      //     if (file.size >= ret.fileLen) {
-      //       self.goods_form[key] = ret.base64;
-      //     } else {
-      //       const reader = new FileReader();
-      //       reader.onload = function(e) {
-      //         const src = e.target.result;
-      //         self.goods_form[key] = src;
-      //       };
-      //       reader.readAsDataURL(res);
-      //     }
-      //   })
-      //   .catch(ret => {
-      //     const reader = new FileReader();
-      //     reader.onload = function(e) {
-      //       const src = e.target.result;
-      //       self.goods_form[key] = src;
-      //     };
-      //     reader.readAsDataURL(res);
-      //   })
-      //   .always(ret => {});
-    },
-    // 删除图片
-    imageClear() {
-      this.url = this.file_name = "";
-      this.hasImage = false;
-    },
     getConfig: function() {
       return {};
     },
@@ -158,6 +108,7 @@ export default {
       return dq.querySelector(str);
     },
     handleChange(e) {
+
       let inputDOM = document.querySelector(
         "#g-core-upload-input-" + this.formID
       );
@@ -193,7 +144,6 @@ export default {
       }
 
       this.files = e.target.files;
-      this.file2img(this.files, "url");
       this.__dispatch(
         "imagechanged",
         this.files.length > 1 ? this.files : this.files[0]
@@ -209,7 +159,7 @@ export default {
   position: relative;
   overflow: hidden;
   text-align: center;
-  .g-core-text {
+  .g-core-text{
     background: rgba(204, 204, 204, 0.2);
     height: 61px;
     display: flex;
@@ -227,45 +177,6 @@ export default {
   height: 100%;
   min-height: 61px;
   opacity: 0;
-}
-.img-area {
-  transition: 0.3s cubic-bezier(0.3, 0, 0.2, 1);
-  position: relative;
-  .title,
-  .del {
-    display: block;
-    position: absolute;
-  }
-  .title {
-    height: 40px;
-    line-height: 40px;
-    font-size: 0.18rem;
-    bottom: 0;
-    width: 100%;
-    border-radius: 1px;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.6);
-    color: #ffffff;
-  }
-  .del {
-    top: 20px;
-    right: 20px;
-    width: 24px;
-    cursor: pointer;
-  }
-  img {
-    width: 100%;
-    height: auto;
-  }
-}
-.img-area-config {
-  &:hover {
-    transform: scale(1.02);
-    .title,
-    .del {
-      display: block;
-    }
-  }
 }
 </style>
 
