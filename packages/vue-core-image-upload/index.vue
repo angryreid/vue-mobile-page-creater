@@ -19,7 +19,7 @@
         type="file"
         v-bind:accept="inputAccept"
         v-on:change="handleChange"
-        style="width: 100%; height: 100%;"
+        style="width: 30%; height: 100%;cursor: pointer;"
       />
     </form>
     <div class="img-area" :class="{'img-area-config': config_model }" v-else="hasImage">
@@ -114,9 +114,9 @@ export default {
         // 读取完成
         // res是base64格式的图片
         this[key] = fileReader.result;
-        console.log(file);
         this.file_name = file.name;
         this.hasImage = true;
+        this.$emit("componentChange")
       });
 
       // lrz(file)
@@ -148,14 +148,12 @@ export default {
       this.hasImage = false;
     },
     getConfig: function() {
-      return {};
+      return {
+        url: this.url
+      };
     },
     __dispatch(name, res, data) {
       this.$emit && this.$emit(name, res, data);
-    },
-    __find(str) {
-      let dq = document.querySelector("#vciu-modal-" + this.formID);
-      return dq.querySelector(str);
     },
     handleChange(e) {
       let inputDOM = document.querySelector(
@@ -168,7 +166,7 @@ export default {
       if (extensionsArr.length > 1) {
         var reg = new RegExp("^[" + extensionsArr.join("|") + "]+$", "i");
         if (!reg.test(fileExt)) {
-          return this.__dispatch("errorhandle", "TYPE ERROR");
+          // return this.__dispatch("errorhandle", "TYPE ERROR");
         }
       }
       if (e.target.files[0].size > this.maxFileSize) {
@@ -181,23 +179,23 @@ export default {
           formatSize = options.maxFileSize.toFixed(2) + "Byte";
         }
         console.warn("FILE IS TOO LARGER MAX FILE IS " + formatSize);
-        return this.__dispatch(
-          "errorhandle",
-          "FILE IS TOO LARGER MAX FILE IS " + formatSize
-        );
+        // return this.__dispatch(
+        //   "errorhandle",
+        //   "FILE IS TOO LARGER MAX FILE IS " + formatSize
+        // );
       }
 
       if (this.multipleSize > 0 && e.target.files.length > this.multipleSize) {
         console.warn("FILE NUM IS LARGER THAN " + this.multipleSize);
-        return this.__dispatch("errorhandle", "FILE NUM OVERLOAD");
+        // return this.__dispatch("errorhandle", "FILE NUM OVERLOAD");
       }
 
       this.files = e.target.files;
       this.file2img(this.files, "url");
-      this.__dispatch(
-        "imagechanged",
-        this.files.length > 1 ? this.files : this.files[0]
-      );
+      // this.__dispatch(
+      //   "imagechanged",
+      //   this.files.length > 1 ? this.files : this.files[0]
+      // );
       // 解决选中同一张图片 不发生change事件问题
       inputDOM.value = "";
     }

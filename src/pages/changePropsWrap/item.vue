@@ -74,7 +74,15 @@ export default {
       let newValue = [].concat(this.value)
       newValue.splice(index, 1)
       this.$emit('input', newValue)
-    }
+    },
+    // /**
+    //  * 名称转换为中文
+    //  */
+    // handleChangeName(name){
+    //   if(name === "img_url"){
+    //     return "图片地址"
+    //   }
+    // }
   }
 }
 </script>
