@@ -20,7 +20,6 @@
           'active': activeKey === indexKey(index)
         }"
         @click.native.stop="handleSelect(indexKey(index))"
-        @componentChange="handleSelect(indexKey(index))"
         :indexList="indexKey(index)"
         :ref="`cpt-${indexKey(index)}`"
       >
@@ -90,7 +89,7 @@ export default {
      */
     handleSelect: function (key) {
       const props = this.$refs[`cpt-${key}`][0].getConfig()
-      console.log(key, props)
+      // console.log(key, props)
       this.select(key, props)
     }
   }

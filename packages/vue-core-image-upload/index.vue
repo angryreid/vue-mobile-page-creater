@@ -116,7 +116,6 @@ export default {
         this[key] = fileReader.result;
         this.file_name = file.name;
         this.hasImage = true;
-        this.$emit("componentChange")
       });
 
       // lrz(file)
