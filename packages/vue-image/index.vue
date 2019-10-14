@@ -1,20 +1,20 @@
 <template>
   <div class="container">
-    <template v-if="!url">
+    <template v-if="!imgComponent.url">
       <div class="text">输入图片路径或上传图片</div>
     </template>
     <template v-else>
       <div class="text" v-if="imgError">获取图片失败（请检查路径是否出错）</div>
-      <img v-else :src="url" alt />
+      <img v-else :src="imgComponent.url" alt />
     </template>
   </div>
 </template>
 <script>
 export default {
   props: {
-    url: {
-      type: String,
-      default: ""
+    imgComponent: {
+      type: Object,
+      default: () => ({ url: "" })
     }
   },
   data() {
@@ -23,10 +23,10 @@ export default {
     };
   },
   watch: {
-    url(newVal) {
+    "imgComponent.url"(newVal) {
       if (!newVal) return;
       let img = new Image();
-      img.src = this.url;
+      img.src = this.imgComponent.url;
       img.onload = () => {
         this.imgError = false;
       };
@@ -38,7 +38,7 @@ export default {
   methods: {
     getConfig: function() {
       return {
-        url: this.url
+        imgComponent: this.imgComponent
       };
     }
   }

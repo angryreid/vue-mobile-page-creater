@@ -1,49 +1,13 @@
 <template>
   <div class="propsTypeWrap">
     <!-- 属性为上传图片 -->
-    <template v-if="name === 'url'">
+    <template v-if="name === 'imgComponent'">
       <VueImageUpload @imageChanged="handleImage"></VueImageUpload>
       <div class="changePropsItemKey" v-if="name">{{name}}</div>
-      <a-input :value="value" @input="$emit('input', $event.target.value)" />
-    </template>
-
-    <!-- 属性为 string 或 number -->
-    <template v-else-if="checkType(value) === 'string' || checkType(value) === 'number'">
-      <div class="changePropsItemKey" v-if="name">{{name}}</div>
-      <a-input :value="value" @input="$emit('input', $event.target.value)" />
-    </template>
-
-    <!-- 属性为 boolean -->
-    <template v-else-if="checkType(value) === 'boolean'">
-      <div class="changePropsItemKey" v-if="name">{{name}}</div>
-      <a-switch :defaultChecked="value" @change="$emit('input', $event)" />
-    </template>
-
-    <!-- 属性为 object -->
-    <template v-else-if="checkType(value) === 'object'">
-      <div class="changePropsItemKey" v-if="name">{{name}}</div>
-      <template v-for="(item, index) in value">
-        <PropsItem :key="index" v-model="value[index]" :name="index"></PropsItem>
-      </template>
-    </template>
-
-    <!-- 属性为 array -->
-    <template v-else="checkType(value) === 'array'">
-      <div class="changePropsItemKey" v-if="name">{{name}}</div>
-      <template v-for="(item, index) in value">
-        <div class="propsTypeArrayItemWrap" :key="index">
-          <a-button
-            v-if="value.length > 1"
-            @click="handleRemoveItem(index)"
-            class="propsTypeArrayItemRemove"
-            type="danger"
-            shape="circle"
-            icon="minus"
-          ></a-button>
-          <PropsItem v-model="value[index]" :name="''"></PropsItem>
-        </div>
-      </template>
-      <a-button type="primary" class="propsTypeArrayAdd" @click="handleAddItem">追加一条数据</a-button>
+      <a-input
+        :value="value.url"
+        @input="$emit('input', {...value,...{url : $event.target.value}})"
+      />
     </template>
   </div>
 </template>
@@ -54,7 +18,7 @@ export default {
   name: "PropsItem",
   props: {
     value: {
-      type: [Object, Array, Number, String, Boolean]
+      type: Object
     },
     name: {
       type: String
@@ -64,13 +28,6 @@ export default {
     VueImageUpload
   },
   methods: {
-    checkType: function(data) {
-      return Object.prototype.toString
-        .call(data)
-        .match(/\[object (.*?)\]/)[1]
-        .toLocaleLowerCase();
-    },
-
     /**
      * 数组追加一条
      */
@@ -85,7 +42,6 @@ export default {
         this.$emit("input", newValue);
       }
     },
-
     /**
      * 数组移除单条
      */
@@ -98,16 +54,8 @@ export default {
      *
      */
     handleImage(url) {
-      this.$emit("input", url);
+      this.$emit("input", {...this.value,...{url}});
     }
-    // /**
-    //  * 名称转换为中文
-    //  */
-    // handleChangeName(name){
-    //   if(name === "img_url"){
-    //     return "图片地址"
-    //   }
-    // }
   }
 };
 </script>
