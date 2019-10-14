@@ -26,10 +26,19 @@ export default [
     ]
   },
   {
-    name: '图片组件',
+    name: '图片上传组件',
     child: [
       {
-        name: '图片组件',
+        name: '图片上传组件',
+        component: 'c-img-upload'
+      }
+    ]
+  },
+  {
+    name: '图片展示',
+    child: [
+      {
+        name: '图片展示',
         component: 'c-img'
       }
     ]

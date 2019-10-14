@@ -1,20 +1,26 @@
 <template>
   <div class="propsTypeWrap">
+    <!-- 属性为上传图片 -->
+    <template v-if="name === 'url'">
+      <VueImageUpload @imageChanged="handleImage"></VueImageUpload>
+      <div class="changePropsItemKey" v-if="name">{{name}}</div>
+      <a-input :value="value" @input="$emit('input', $event.target.value)" />
+    </template>
 
     <!-- 属性为 string 或 number -->
-    <template v-if="checkType(value) === 'string' || checkType(value) === 'number'">
+    <template v-else-if="checkType(value) === 'string' || checkType(value) === 'number'">
       <div class="changePropsItemKey" v-if="name">{{name}}</div>
-      <a-input :value="value" @input="$emit('input', $event.target.value)"/>
+      <a-input :value="value" @input="$emit('input', $event.target.value)" />
     </template>
 
     <!-- 属性为 boolean -->
-    <template v-if="checkType(value) === 'boolean'">
+    <template v-else-if="checkType(value) === 'boolean'">
       <div class="changePropsItemKey" v-if="name">{{name}}</div>
-      <a-switch :defaultChecked="value" @change="$emit('input', $event)"/>
+      <a-switch :defaultChecked="value" @change="$emit('input', $event)" />
     </template>
 
     <!-- 属性为 object -->
-    <template v-if="checkType(value) === 'object'">
+    <template v-else-if="checkType(value) === 'object'">
       <div class="changePropsItemKey" v-if="name">{{name}}</div>
       <template v-for="(item, index) in value">
         <PropsItem :key="index" v-model="value[index]" :name="index"></PropsItem>
@@ -22,23 +28,30 @@
     </template>
 
     <!-- 属性为 array -->
-    <template v-if="checkType(value) === 'array'">
+    <template v-else="checkType(value) === 'array'">
       <div class="changePropsItemKey" v-if="name">{{name}}</div>
       <template v-for="(item, index) in value">
         <div class="propsTypeArrayItemWrap" :key="index">
-          <a-button v-if="value.length > 1" @click="handleRemoveItem(index)" class="propsTypeArrayItemRemove" type="danger" shape="circle" icon="minus"></a-button>
+          <a-button
+            v-if="value.length > 1"
+            @click="handleRemoveItem(index)"
+            class="propsTypeArrayItemRemove"
+            type="danger"
+            shape="circle"
+            icon="minus"
+          ></a-button>
           <PropsItem v-model="value[index]" :name="''"></PropsItem>
         </div>
       </template>
       <a-button type="primary" class="propsTypeArrayAdd" @click="handleAddItem">追加一条数据</a-button>
     </template>
-
   </div>
 </template>
 
 <script>
+import VueImageUpload from "../../components/vue-upload-img";
 export default {
-  name: 'PropsItem',
+  name: "PropsItem",
   props: {
     value: {
       type: [Object, Array, Number, String, Boolean]
@@ -47,34 +60,46 @@ export default {
       type: String
     }
   },
+  components: {
+    VueImageUpload
+  },
   methods: {
-    checkType: function (data) {
-      return Object.prototype.toString.call(data).match(/\[object (.*?)\]/)[1].toLocaleLowerCase()
+    checkType: function(data) {
+      return Object.prototype.toString
+        .call(data)
+        .match(/\[object (.*?)\]/)[1]
+        .toLocaleLowerCase();
     },
 
     /**
      * 数组追加一条
      */
-    handleAddItem: function () {
-      let newValue = this.value
-      let newItem = {}
+    handleAddItem: function() {
+      let newValue = this.value;
+      let newItem = {};
       if (newValue[0]) {
         for (let item in newValue[0]) {
-          newItem[item] = newValue[0][item]
+          newItem[item] = newValue[0][item];
         }
-        newValue.push(newItem)
-        this.$emit('input', newValue)
+        newValue.push(newItem);
+        this.$emit("input", newValue);
       }
     },
 
     /**
      * 数组移除单条
      */
-    handleRemoveItem: function (index) {
-      let newValue = [].concat(this.value)
-      newValue.splice(index, 1)
-      this.$emit('input', newValue)
+    handleRemoveItem: function(index) {
+      let newValue = [].concat(this.value);
+      newValue.splice(index, 1);
+      this.$emit("input", newValue);
     },
+    /**图片上传
+     *
+     */
+    handleImage(url) {
+      this.$emit("input", url);
+    }
     // /**
     //  * 名称转换为中文
     //  */
@@ -84,9 +109,18 @@ export default {
     //   }
     // }
   }
-}
+};
 </script>
 
-<style>
-
+<style lang="less" scoped>
+.button {
+  width: 100%;
+  height: 40px;
+  background-color: #ffb200;
+  color: #ffffff;
+  text-align: center;
+  line-height: 40px;
+  border-radius: 40px;
+  cursor: pointer;
+}
 </style>
