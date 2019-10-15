@@ -8,9 +8,15 @@
         :value="value.url"
         @input="$emit('input', {...value,...{url : $event.target.value}})"
       />
-      <a-button type="primary" class="propsTypeArrayAdd" @click="hotAreaSwitch">热区开关</a-button>
-      <template>
-        <a-button type="primary" class="propsTypeArrayAdd" @click="handleAddItem">追加一条数据</a-button>
+      <div class="changePropsItemKey">热区开关</div>
+
+      <a-switch
+        :defaultChecked="value.switch"
+        @change="$emit('input', {...value,...{switch : $event}})"
+      />
+      <template v-if="value.switch">
+        
+        <a-button type="primary" class="propsTypeArrayAdd" @click="handleAddItem">新增热区</a-button>
       </template>
     </template>
   </div>
@@ -59,9 +65,6 @@ export default {
      */
     handleImage(url) {
       this.$emit("input", { ...this.value, ...{ url } });
-    },
-    hotAreaSwitch(value){
-      this.$emit("input", {...this.value, ...{switch: !value.switch}})
     }
   }
 };

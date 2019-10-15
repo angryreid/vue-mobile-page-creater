@@ -14,13 +14,10 @@
           :parentW="bounding_width"
           :parentH="bounding_height"
           :parentLimitation="true"
+          v-if="imgComponent.switch"
           v-on:resizing="resize"
           v-on:dragging="resize"
-        >
-          <h3>Hello World!</h3>
-          <p>{{ top }} х {{ left }}</p>
-          <p>{{ width }} х {{ height }}</p>
-        </VueDragResize>
+        ></VueDragResize>
       </div>
     </template>
   </div>
@@ -31,7 +28,11 @@ export default {
   props: {
     imgComponent: {
       type: Object,
-      default: () => ({ url: "", switch: false })
+      default: () => ({
+        url: "",
+        switch: false,
+        hot_area_list: [{ background_color: "#ffffff" }]
+      })
     }
   },
   components: {
