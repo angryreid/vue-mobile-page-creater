@@ -13,11 +13,11 @@
 </template>
 
 <script>
-import './index.less'
-import ItemCpt from './item'
+import "./index.less";
+import ItemCpt from "./item";
 
 export default {
-  name: 'ChangeProps',
+  name: "ChangeProps",
   components: {
     ItemCpt
   },
@@ -38,8 +38,8 @@ export default {
      * props 改变
      */
     editProps: {
-      handler: function (newProps) {
-        this.handleChangeProps(newProps)
+      handler: function(newProps) {
+        this.handleChangeProps(newProps);
       },
       immediate: true,
       deep: true
@@ -49,11 +49,11 @@ export default {
     /**
      * 删除组件
      */
-    handleDelCpt: function () {
+    handleDelCpt: function() {
       this.pushMsg({
-        type: 'delCpt'
-      })
+        type: "delCpt"
+      });
     }
   }
-}
+};
 </script>

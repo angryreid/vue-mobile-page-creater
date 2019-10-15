@@ -5,25 +5,32 @@
     </template>
     <template v-else>
       <div class="text" v-if="imgError">获取图片失败（请检查路径是否出错）</div>
-      <div v-else class="hot-area" ref="hot-area">
+      <div v-else class="hot-area-img" ref="hot-area">
         <img :src="imgComponent.url" alt />
-        <VueDragResize
-          :isActive="true"
-          :w="200"
-          :h="200"
-          :parentW="bounding_width"
-          :parentH="bounding_height"
-          :parentLimitation="true"
-          v-if="imgComponent.switch"
-          v-on:resizing="resize"
-          v-on:dragging="resize"
-        ></VueDragResize>
+        <div class="hot-area" v-if="imgComponent.switch">
+          <VueDragResize
+            v-for="(hot,index) in imgComponent.hot_area_list"
+            :style="{'background-color': hot.background_color}"
+            :key="index"
+            :isActive="hot.active"
+            :w="Number(hot.w)"
+            :h="Number(hot.h)"
+            :x="Number(hot.x)"
+            :y="Number(hot.y)"
+            :parentW="bounding_width"
+            :parentH="bounding_height"
+            :parentLimitation="true"
+            v-on:dragstop="resize(arguments, index)"
+            v-on:resizing="resize(arguments, index)"
+          ></VueDragResize>
+        </div>
       </div>
     </template>
   </div>
 </template>
 <script>
 import VueDragResize from "vue-drag-resize";
+import { debounce } from "lodash";
 export default {
   props: {
     imgComponent: {
@@ -31,7 +38,16 @@ export default {
       default: () => ({
         url: "",
         switch: false,
-        hot_area_list: [{ background_color: "#ffffff" }]
+        hot_area_list: [
+          {
+            active: true,
+            background_color: "#ffffff",
+            w: 50,
+            h: 50,
+            x: 0,
+            y: 0
+          }
+        ]
       })
     }
   },
@@ -42,11 +58,7 @@ export default {
     return {
       imgError: false,
       bounding_height: 0,
-      bounding_width: 0,
-      width: 0,
-      height: 0,
-      top: 0,
-      left: 0
+      bounding_width: 0
     };
   },
   watch: {
@@ -64,12 +76,24 @@ export default {
     }
   },
   methods: {
-    resize(newRect) {
-      this.width = newRect.width;
-      this.height = newRect.height;
-      this.top = newRect.top;
-      this.left = newRect.left;
-      return false;
+    resize: debounce(function(args, index) {
+      const newRect = args[0];
+      this.pushMsg({
+        type: "hot_area_change",
+        data: {
+          index: index,
+          w: newRect.width,
+          h: newRect.height,
+          x: newRect.left,
+          y: newRect.top
+        }
+      });
+    }, 300),
+    /**
+     * 向父级发送消息
+     */
+    pushMsg: function(data) {
+      top.postMessage(data, location.href.replace("view", ""));
     },
     getBounding() {
       let hot_area = this.$refs["hot-area"];
@@ -94,10 +118,17 @@ export default {
     align-items: center;
     justify-content: center;
   }
-  .hot-area {
+  .hot-area-img {
+    position: relative;
     width: 100%;
     height: auto;
-    position: relative;
+    .hot-area {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+    }
   }
   img {
     width: 100%;
