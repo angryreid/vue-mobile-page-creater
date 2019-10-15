@@ -31,7 +31,7 @@ export default {
   props: {
     imgComponent: {
       type: Object,
-      default: () => ({ url: "" })
+      default: () => ({ url: "", switch: false })
     }
   },
   components: {

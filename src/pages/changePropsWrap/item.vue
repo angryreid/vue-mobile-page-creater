@@ -8,7 +8,10 @@
         :value="value.url"
         @input="$emit('input', {...value,...{url : $event.target.value}})"
       />
-      
+      <a-button type="primary" class="propsTypeArrayAdd" @click="hotAreaSwitch">热区开关</a-button>
+      <template>
+        <a-button type="primary" class="propsTypeArrayAdd" @click="handleAddItem">追加一条数据</a-button>
+      </template>
     </template>
   </div>
 </template>
@@ -55,7 +58,10 @@ export default {
      *
      */
     handleImage(url) {
-      this.$emit("input", {...this.value,...{url}});
+      this.$emit("input", { ...this.value, ...{ url } });
+    },
+    hotAreaSwitch(value){
+      this.$emit("input", {...this.value, ...{switch: !value.switch}})
     }
   }
 };
