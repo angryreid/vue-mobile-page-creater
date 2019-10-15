@@ -31,7 +31,7 @@ export default {
   props: {
     text: {
       type: String,
-      default: "请上传图片"
+      default: "上传图片"
     },
     extensions: {
       type: String,

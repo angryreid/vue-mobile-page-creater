@@ -3,11 +3,12 @@
     <!-- 属性为上传图片 -->
     <template v-if="name === 'imgComponent'">
       <VueImageUpload @imageChanged="handleImage"></VueImageUpload>
-      <div class="changePropsItemKey" v-if="name">{{name}}</div>
+      <div class="changePropsItemKey">图片路径</div>
       <a-input
         :value="value.url"
         @input="$emit('input', {...value,...{url : $event.target.value}})"
       />
+      
     </template>
   </div>
 </template>
