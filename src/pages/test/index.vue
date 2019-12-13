@@ -1,18 +1,17 @@
 <template>
   <div class="container">
     <div class="iframe">
-      <VueCoreImageUpload></VueCoreImageUpload>
+      <Swiper></Swiper>
     </div>
   </div>
 </template>
 
 <script>
-import VueCoreImageUpload from "../../../packages/vue-core-image-upload/index";
-
+import Swiper from "../../../packages/swiper"
 export default {
   name: "Test",
   components: {
-    VueCoreImageUpload
+    Swiper
   },
   data() {
     return {};

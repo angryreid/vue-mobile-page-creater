@@ -4,6 +4,8 @@ import router from './router'
 import registerComponents from '../packages'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
+import 'swiper/dist/css/swiper.css';
+import "./assets/index.less"
 
 Vue.use(Antd)
 

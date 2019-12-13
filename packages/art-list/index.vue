@@ -26,13 +26,13 @@ export default {
       ]
     }
   },
-  methods: {
-    getConfig: function () {
-      return {
-        list: this.list
+    methods: {
+      getConfig: function () {
+        return {
+          list: this.list
+        }
       }
     }
-  }
 }
 </script>
 
